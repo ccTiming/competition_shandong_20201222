@@ -3,8 +3,8 @@ from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
 
 
 class Encoder(nn.Module):
-    def __init__(self, encoder_num_embeddings, encoder_embedding_dim, dropout_rate,
-                 hidden_size, num_layers, bidirectional=False):
+    def __init__(self, encoder_num_embeddings, encoder_embedding_dim,
+                 hidden_size, num_layers, bidirectional=False, dropout_rate=0.1):
         super(Encoder, self).__init__()
         self.encoder_num_embeddings = encoder_num_embeddings
         self.encoder_embedding_dim = encoder_embedding_dim
