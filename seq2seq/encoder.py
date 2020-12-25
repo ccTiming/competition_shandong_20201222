@@ -28,13 +28,12 @@ class Encoder(nn.Module):
     def forward(self, x):
         """
         :param x: [batch_size,seq_len]
-        :return:
+        :return:  out:[batch_size,seq_len,hidden_size]
+                  hidden:[num_layers,batch_size,hidden_size]
         """
         # embeddings:[batch_size,seq_len,embedding_dim]
         embeddings = self.embeddings(x)
         dropout_embeddings = self.dropout(embeddings)
-        # out:[batch_size,seq_len,hidden_size]
-        # hidden:[num_layers,batch_size,hidden_size]
 
         out, hidden = self.gru(dropout_embeddings)
         return out, hidden
