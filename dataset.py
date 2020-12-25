@@ -12,6 +12,7 @@ class HealthDataset(Dataset):
         self.inputs = []
         self.outputs = []
         tmp = []
+        # vob = []
         for idx, d in iter_row:
             # 去掉时间
             tmp.append(d[:-1].tolist())
@@ -19,7 +20,16 @@ class HealthDataset(Dataset):
                 self.inputs.append(tmp[:30])
                 self.outputs.append(tmp[30:])
                 tmp = []
+            # vob.extend(d[:-1].tolist())
+        #
+        # for j in range(len(vob)):
+        #     try:
+        #         vob[j] = int(vob[j])
+        #     except:
+        # vob[j] = 9999
+        # print(len((set(vob))))
 
+    #
     def __getitem__(self, item):
         # diseases = ['上呼吸道感染', '上呼吸道疾病', '丘疹性荨麻疹', '中耳炎', '发热', '变应性鼻炎', '呕吐', '呼吸道感染', '咳嗽', '哮喘', '外伤证', '头晕', '头痛',
         #             '急性上呼吸道感染', '急性喉炎', '急性扁桃体炎', '手足口病', '支气管炎', '消化不良', '湿疹', '猩红热样红斑', '疱疹性咽峡炎', '皮炎', '皮疹', '结膜炎',
@@ -47,7 +57,8 @@ disease_data_loader = DataLoader(HealthDataset(), shuffle=True, batch_size=1)
 
 if __name__ == '__main__':
     hd = HealthDataset()
-    # print(hd.__getitem__(0))
-    for i, data in enumerate(disease_data_loader):
-        print(i, data)
-        break
+    item = hd.__getitem__(0)
+    print(item['input'].size(), item['output'].size())
+    # for i, data in enumerate(disease_data_loader):
+    #     print(i, data)
+    #     break
