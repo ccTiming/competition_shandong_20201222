@@ -33,7 +33,7 @@ class Decoder(nn.Module):
                                 bias=False)
         self.dense2 = nn.Linear(self.decoder_hidden_size, self.decoder_num_embedding)
 
-    def forward(self, target, encoder_hidden_state, encoder_outputs):
+    def forward(self, target, encoder_outputs, encoder_hidden_state):
         """
         :param target: list, sequence of sentence
         :param encoder_hidden_state: [num_layers*bidirectional,batch_size,encoder_hidden_size]
@@ -49,12 +49,13 @@ class Decoder(nn.Module):
         # 设置句子输出 15 个字符,包括开始字符长度为 16
         for t in range(15):
             # decoder_output_t: [batch_size,1,decoder_num_embeddings]
+            # print('decoder_hidden_state', decoder_hidden_state.size())
             decoder_output_t, decoder_hidden_state = self.forward_step(decoder_input, decoder_hidden_state,
                                                                        encoder_outputs)
             decoder_outputs[:, t, :] = decoder_output_t
             _, index = torch.topk(decoder_output_t, 1)
             decoder_input = index
-
+        # print('decoder_outputs', decoder_outputs.size())
         return decoder_outputs, decoder_hidden_state
 
     def forward_step(self, decoder_input, decoder_hidden_state, encoder_outputs):
@@ -71,8 +72,9 @@ class Decoder(nn.Module):
 
         # out:[batch_size,1,decoder_hidden_state]
         # hidden:[num_layers*bidirectional,batch_size,decoder_hidden_state]
+        # print(embeddings_dropout.size(), decoder_hidden_state.size())
         out, hidden = self.gru(embeddings_dropout, decoder_hidden_state)
-
+        # print('size,,,,', out.size(), print(hidden.size()))
         # 添加 attention #
         # attention_weight:[batch_size,1,seq_len]
         attention_weight = self.attention(hidden, encoder_outputs).unsqueeze(1)
@@ -85,4 +87,5 @@ class Decoder(nn.Module):
         # attention 结束 #
 
         out = F.log_softmax(self.dense2(out), dim=-1)
+        # print('out', out.size())
         return out, hidden

@@ -38,9 +38,9 @@ class BiLSTMAttention(nn.Module):
         score = F.softmax(attention, dim=-1)  # [batch_size,seq_len,1]
         output = output * score  # [batch_size,seq_len,hidden_size*2]
         # attention 结束
-        print(output.size())
+        # print(output.size())
         output = torch.sum(output, dim=1)  # [batch_size,hidden_size*2]
-        print(output.size(), hidden.size())
+        # print(output.size(), hidden.size())
         output = self.dense(output)  # [batch_size,508]
 
         return output, hidden

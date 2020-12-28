@@ -30,7 +30,8 @@ class Attention(nn.Module):
         elif self.method == 'general':
             encoder_output = self.dense_general(encoder_output)  # [batch_size,seq_len,encoder_hidden_size]
             # hidden_state:[1,batch_size,decoder_hidden_size]-->[batch_size,decoder_hidden_size,1]
-            decoder_hidden_state = decoder_hidden_state[-1, :, :].permute(1, 2, 0)
+            # print('general', decoder_hidden_state[-1:, :, :].size())
+            decoder_hidden_state = decoder_hidden_state[-1:, :, :].permute(1, 2, 0)
             attention = encoder_output.bmm(decoder_hidden_state).squeeze(-1)
             attention_weight = F.softmax(attention)  # [batch_size,seq_len]
         elif self.method == 'concat':

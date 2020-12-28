@@ -6,7 +6,7 @@ from seq2seq.decoder import Decoder
 class Seq2Seq(nn.Module):
     def __init__(self,
                  encoder_num_embeddings, encoder_embedding_dim, encoder_hidden_size, encoder_num_layers,
-                 decoder_num_embedding, decoder_embedding_dim, decoder_num_layers, decoder_hidden_size
+                 decoder_num_embeddings, decoder_embedding_dim, decoder_num_layers, decoder_hidden_size
                  ):
         super(Seq2Seq, self).__init__()
 
@@ -15,7 +15,7 @@ class Seq2Seq(nn.Module):
         self.encoder_hidden_size = encoder_hidden_size
         self.encoder_num_layers = encoder_num_layers
 
-        self.decoder_num_embedding = decoder_num_embedding
+        self.decoder_num_embedding = decoder_num_embeddings
         self.decoder_embedding_dim = decoder_embedding_dim
         self.decoder_num_layers = decoder_num_layers
         self.decoder_hidden_size = decoder_hidden_size
@@ -27,5 +27,6 @@ class Seq2Seq(nn.Module):
 
     def forward(self, inputs, target):
         encoder_outputs, encoder_hidden_state = self.encoder(inputs)
+        # print(encoder_hidden_state.size())
         decoder_outputs, decoder_hidden_state = self.decoder(target, encoder_outputs, encoder_hidden_state)
         return decoder_outputs, decoder_hidden_state

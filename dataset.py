@@ -21,12 +21,12 @@ class HealthDataset(Dataset):
                 self.outputs.append(tmp[30:])
                 tmp = []
             # vob.extend(d[:-1].tolist())
-        #
+
         # for j in range(len(vob)):
         #     try:
         #         vob[j] = int(vob[j])
         #     except:
-        # vob[j] = 9999
+        #         vob[j] = 0
         # print(len((set(vob))))
 
     #
@@ -46,7 +46,7 @@ class HealthDataset(Dataset):
                     x[i][j] = int(x[i][j])
                 except:
                     # 值为'None'
-                    x[i][j] = 9999
+                    x[i][j] = 0
         return x
 
     def __len__(self):
