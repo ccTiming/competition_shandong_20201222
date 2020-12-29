@@ -32,6 +32,7 @@ class Encoder(nn.Module):
                   hidden:[num_layers,batch_size,hidden_size]
         """
         # embeddings:[batch_size,seq_len,embedding_dim]
+        # print('x', x.size())
         embeddings = self.embeddings(x)
         dropout_embeddings = self.dropout(embeddings)
 
