@@ -10,17 +10,24 @@ class ProcessData:
         self.data_2018 = self.generate_data(data_path2, None)
 
     def process_data(self):
+        numbers = []
         with open(config.save_2_years_data, 'w')as f:
             keys = list(self.data_2017.keys())
-            f.write(','.join(keys) + ',时间\n')
+            f.write('时间,' + ','.join(keys) + '\n')
             for i in range(len(self.data_2017[keys[0]])):
                 for key in keys:
                     f.write(str(self.data_2017[key][i]) + ',')
+                    numbers.append(self.data_2017[key][i])
                 f.write(self.get_date(i, '20170101') + '\n')
             for i in range(len(self.data_2017[keys[0]])):
                 for key in keys:
                     f.write(str(self.data_2018[key][i]) + ',')
+                    numbers.append(self.data_2017[key][i])
                 f.write(self.get_date(i, '20180101') + '\n')
+        numbers = list(set([number if number else 0 for number in numbers]))
+        with open(config.vocab_path, 'w')as f:
+            for number in numbers:
+                f.write(str(number) + '\n')
 
     @staticmethod
     def get_date(days, base_time):
