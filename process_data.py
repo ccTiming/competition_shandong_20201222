@@ -5,25 +5,71 @@ import time
 
 
 class ProcessData:
-    def __init__(self, data_path1=config.train_data2017_path, data_path2=config.train_data2018_path):
+    def __init__(self,
+                 data_path1=config.train_data2017_path,
+                 data_path2=config.train_data2018_path,
+                 data_path3=config.test_data2019_path,
+                 data_path4=config.test_data2020_path,
+                 save_data1=config.save_2_years_data,
+                 save_data2=config.save_2_years_test_data,
+                 start_date1='20170101',
+                 start_date2='20180101',
+                 start_date3='20190101',
+                 start_date4='20200101',
+                 ):
         self.data_2017 = self.generate_data(data_path1, None)
         self.data_2018 = self.generate_data(data_path2, None)
+        self.data_2019 = self.generate_data(data_path3, None)
+        self.data_2020 = self.generate_data(data_path4, None)
+        self.save_data1 = save_data1
+        self.save_data2 = save_data2
+        self.start_date1 = start_date1
+        self.start_date2 = start_date2
+        self.start_date3 = start_date3
+        self.start_date4 = start_date4
 
     def process_data(self):
         numbers = []
-        with open(config.save_2_years_data, 'w')as f:
+        with open(self.save_data1, 'w')as f:
             keys = list(self.data_2017.keys())
             f.write('时间,' + ','.join(keys) + '\n')
             for i in range(len(self.data_2017[keys[0]])):
+                f.write(self.get_date(i, self.start_date1))
                 for key in keys:
-                    f.write(str(self.data_2017[key][i]) + ',')
+                    value = self.data_2017[key][i]
+                    value = str(value) if value else str(0)
+                    f.write(',' + str(value))
                     numbers.append(self.data_2017[key][i])
-                f.write(self.get_date(i, '20170101') + '\n')
+                f.write('\n')
             for i in range(len(self.data_2017[keys[0]])):
+                f.write(self.get_date(i, self.start_date2))
                 for key in keys:
-                    f.write(str(self.data_2018[key][i]) + ',')
-                    numbers.append(self.data_2017[key][i])
-                f.write(self.get_date(i, '20180101') + '\n')
+                    value = self.data_2018[key][i]
+                    value = str(value) if value else str(0)
+                    f.write(',' + str(value))
+                    numbers.append(self.data_2018[key][i])
+                f.write('\n')
+
+        with open(self.save_data2, 'w')as f:
+            keys = list(self.data_2019.keys())
+            f.write('时间,' + ','.join(keys) + '\n')
+            for i in range(len(self.data_2019[keys[0]])):
+                f.write(self.get_date(i, self.start_date3))
+                for key in keys:
+                    value = self.data_2019[key][i]
+                    value = str(value) if value else str(0)
+                    f.write(',' + str(value))
+                    numbers.append(self.data_2019[key][i])
+                f.write('\n')
+            for i in range(len(self.data_2019[keys[0]])):
+                f.write(self.get_date(i, self.start_date4))
+                for key in keys:
+                    value = self.data_2020[key][i]
+                    value = str(value) if value else str(0)
+                    f.write(',' + str(value))
+                    numbers.append(self.data_2020[key][i])
+                f.write('\n')
+
         numbers = list(set([number if number else 0 for number in numbers]))
         with open(config.vocab_path, 'w')as f:
             for number in numbers:
