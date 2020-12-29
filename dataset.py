@@ -16,7 +16,7 @@ class HealthDataset(Dataset):
         for idx, d in iter_row:
             # 去掉时间
             tmp.append(d[:-1].tolist())
-            if len(tmp) == 45:
+            if len(tmp) == 44:
                 self.inputs.append(tmp[:30])
                 self.outputs.append(tmp[30:])
                 tmp = []

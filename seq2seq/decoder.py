@@ -45,9 +45,9 @@ class Decoder(nn.Module):
 
         # 设置句子开始的第一个字符的 id 为 0
         decoder_input = torch.LongTensor(torch.ones([batch_size, 1], dtype=torch.int64) * 0).to(config.device)
-        decoder_outputs = torch.zeros([batch_size, 15, self.decoder_num_embedding]).to(config.device)
-        # 设置句子输出 15 个字符,包括开始字符长度为 16
-        for t in range(15):
+        decoder_outputs = torch.zeros([batch_size, 14, self.decoder_num_embedding]).to(config.device)
+        # 设置句子输出 14 个字符,包括开始字符长度为 16
+        for t in range(14):
             # decoder_output_t: [batch_size,1,decoder_num_embeddings]
             # print('decoder_hidden_state', decoder_hidden_state.size())
             decoder_output_t, decoder_hidden_state = self.forward_step(decoder_input, decoder_hidden_state,
